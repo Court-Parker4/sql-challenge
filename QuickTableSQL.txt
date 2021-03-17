@@ -1,0 +1,18 @@
+CREATE TABLE public.deptEMP(
+	emp_no int,
+	dept_no VARCHAR(40),
+	FOREIGN KEY (emp_no) REFERENCES employees(emp_no),
+	FOREIGN KEY (dept_no) REFERENCES departments(dept_no)
+);
+
+CREATE TABLE public.deptmanager(
+	dept_no VARCHAR(40),
+	emp_no INT,
+	FOREIGN KEY (emp_no) REFERENCES employees(emp_no),
+	FOREIGN KEY (dept_no) REFERENCES departments(dept_no)
+);
+
+CREATE TABLE public.salaries(
+	emp_no INT,
+	salary INT
+);
