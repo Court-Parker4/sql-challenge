@@ -1,27 +1,123 @@
 Data Analysis
 Once you have a complete database, do the following:
 
-
-* List the following details of each employee: employee number, last name, first name, sex, and salary.
+Query_1
+1. List the following details of each employee: employee number, last name, first name, sex, and salary.
 - Pull from Employees table - Emp_no, last_name, first_name, sex
 -Join on emp_no from salaries table to pull employee salaries
 
-* List first name, last name, and hire date for employees who were hired in 1986.
+SQL-Query Reference
+SELECT employees.emp_no, employees.last_name, employees.first_name, employees.sex, salaries.emp_no, salaries.salary
+FROM employees
+INNER JOIN salaries ON employees.emp_no=salaries.emp_no;
+
+Query_2
+2. List first name, last name, and hire date for employees who were hired in 1986.
+-Pull from Employees table - last_name, first_name, hire_date
+-order/sort by hire_date 1986
+
+SQL-Query Reference
+
+SELECT last_name, first_name, hire_date FROM employees WHERE DATE_PART('year',hire_date)= 1986
+
+Query_3
+3. List the manager of each department with the following information: department number, department name, the manager's employee number, last name, first name.
+tables and variables needed 
+	- departments -variables = dept_no, dept_name
+	- deptmanager -variables = dept_no, emp_no
+	- employees -variables = emp_no, last_name, first_name
+
+SQL-Query Reference
+
+SELECT deptmanager.dept_no,
+departments.dept_name,
+deptmanager.emp_no,
+employees.last_name,
+employees.first_name
+FROM deptmanager
+LEFT JOIN departments
+ON deptmanager.dept_no = departments.dept_no
+LEFT JOIN employees
+ON deptmanager.emp_no = employees.emp_no
 
 
-* List the manager of each department with the following information: department number, department name, the manager's employee number, last name, first name.
+
+Query_4
+4. List the department of each employee with the following information: employee number, last name, first name, and department name.
+	tables and variables needed:
+		- employees - variables = emp_no, last_name, first_name
+		- departments - variables = dept_no, dept_name
+		- deptemp - variables = emp_no, dept_no
+SQL-Query Reference
+SELECT employees.emp_no,
+employees.last_name,
+employees.first_name,
+deptemp.dept_no,
+deptemp.emp_no,
+departments.dept_name
+FROM employees
+INNER JOIN deptemp ON employees.emp_no=deptemp.emp_no
+INNER JOIN departments ON deptemp.dept_no=deptemp.dept_no
+
+Query_5
+5. List first name, last name, and sex for employees whose first name is "Hercules" and last names begin with "B."
+	tables and variables needed:
+		- employees - variables = last_name, first_name, sex
+SQL-Query Reference
+SELECT last_name, first_name, sex FROM employees
+WHERE first_name = 'Hercules' AND last_name like 'B%';
+
+Query_6
+6. List all employees in the Sales department, including their employee number, last name, first name, and department name.
+employee number, last name, first name, and department name
+	tables and variables needed:
+	- employees - variables = last_name, first_name, emp_no
+	- departments - variables = dept_no, dept_name
+	- deptemp - variables = emp_no, dept_no
+SQL-Query Reference
+SELECT employees.emp_no,
+employees.last_name,
+employees.first_name,
+deptemp.emp_no,
+deptemp.dept_no,
+departments.dept_no,
+departments.dept_name
+FROM employees
+LEFT JOIN deptemp
+ON employees.emp_no=deptemp.emp_no
+INNER JOIN departments
+ON departments.dept_no=deptemp.dept_no
+WHERE departments.dept_name='Sales';
 
 
-* List the department of each employee with the following information: employee number, last name, first name, and department name.
+Query_7
+7. List all employees in the Sales and Development departments, including their employee number, last name, first name, and department name.
+	tables and variables needed:
+	- employees - variables = last_name, first_name, emp_no
+	- departments - variables = dept_no, dept_name
+	- deptemp - variables = emp_no, dept_no
+SQL-Query Reference
+SELECT employees.emp_no,
+employees.last_name,
+employees.first_name,
+deptemp.emp_no,
+deptemp.dept_no,
+departments.dept_no,
+departments.dept_name
+FROM employees
+LEFT JOIN deptemp
+ON employees.emp_no=deptemp.emp_no
+INNER JOIN departments
+ON departments.dept_no=deptemp.dept_no
+WHERE departments.dept_name in ('Sales', 'Development');
 
+Query_8
+8. In descending order, list the frequency count of employee last names, i.e., how many employees share each last name.
+	tables and variables needed:
+	- employees - variables = last_name
 
-* List first name, last name, and sex for employees whose first name is "Hercules" and last names begin with "B."
-
-
-* List all employees in the Sales department, including their employee number, last name, first name, and department name.
-
-
-* List all employees in the Sales and Development departments, including their employee number, last name, first name, and department name.
-
-
-In descending order, list the frequency count of employee last names, i.e., how many employees share each last name.
+SQL-Query Reference
+SELECT last_name, COUNT(*) AS freq_count
+FROM employees
+GROUP BY last_name
+ORDER BY freq_count DESC;
